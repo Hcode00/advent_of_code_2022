@@ -28,19 +28,14 @@ pub fn main() !void {
             count += try sum(line);
         }
     }
-    print("number of groups = {d}\n", .{arr.items.len});
-    print("most Calories = {d}\n", .{find_max(arr.items)});
+    std.sort.heap(i64, arr.items, {}, comptime std.sort.asc(i64));
+    const top1 = arr.pop();
+    const top2 = arr.pop();
+    const top3 = arr.pop();
+    print("top = {}\n", .{top1});
+    print("sum of top 3 = {}\n", .{top1 + top2 + top3});
 }
 
 fn sum(list: []const u8) !i64 {
     return try std.fmt.parseInt(i64, list, 10);
-}
-fn find_max(list: []i64) i64 {
-    var max: i64 = 0;
-    for (list) |num| {
-        if (num > max) {
-            max = num;
-        }
-    }
-    return max;
 }
