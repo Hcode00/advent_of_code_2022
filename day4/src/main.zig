@@ -45,7 +45,7 @@ pub fn main() !void {
 fn getNumOfContained(pairs: [][2]pair) usize {
     var sum: usize = 0;
     for (pairs) |couple| {
-        if (couple[0].contains(&couple[1])) sum += 1 else if (couple[1].contains(&couple[0])) sum += 1;
+        if (couple[0].contains(&couple[1]) or couple[1].contains(&couple[0])) sum += 1;
     }
     return sum;
 }
@@ -67,7 +67,7 @@ const pair = struct {
     to: u8 = 0,
     const Self = @This();
     fn contains(self: *const Self, other: *const pair) bool {
-        return !(self.*.from > other.*.from or self.*.to < other.*.to);
+        return (self.*.from <= other.*.from and self.*.to >= other.*.to);
     }
 };
 
