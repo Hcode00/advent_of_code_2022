@@ -40,6 +40,7 @@ pub fn main() !void {
         try arr.append([2]pair{ lPair, rPair });
     }
     print("sum = {d}\n", .{getNumOfContained(arr.items)});
+    print("overlaps = {d}\n", .{getNumOfOverlaps(arr.items)});
 }
 
 fn getNumOfContained(pairs: [][2]pair) usize {
@@ -50,6 +51,13 @@ fn getNumOfContained(pairs: [][2]pair) usize {
     return sum;
 }
 
+fn getNumOfOverlaps(pairs: [][2]pair) usize {
+    var sum: usize = 0;
+    for (pairs) |couple| {
+        if (couple[0].overlapWith(&couple[1]) or couple[1].overlapWith(&couple[0])) sum += 1;
+    }
+    return sum;
+}
 fn assignOrModify(numPtr: *u8, value: u8) void {
     if (numPtr.* == 0) numPtr.* = value - 48 else numPtr.* = (numPtr.*) * 10 + value - 48;
 }
@@ -68,6 +76,9 @@ const pair = struct {
     const Self = @This();
     fn contains(self: *const Self, other: *const pair) bool {
         return (self.*.from <= other.*.from and self.*.to >= other.*.to);
+    }
+    fn overlapWith(self: *const Self, other: *const pair) bool {
+        return !(self.*.from > other.*.to or self.*.to < other.*.from);
     }
 };
 
