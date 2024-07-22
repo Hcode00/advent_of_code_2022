@@ -49,12 +49,14 @@ pub fn main() !void {
             },
         }
     }
-
-    std.debug.print("stacks count = {d}\n", .{num_of_stacks});
-    std.debug.print("crane instructions count = {d}\n", .{instructions.items.len});
-    std.debug.print("crane first stack size = {d}\n", .{stacks[0].items.len});
     try executeInstructions(instructions.items, &stacks);
 }
+
+const Instruction = struct {
+    count: u8,
+    from: u8,
+    to: u8,
+};
 
 fn executeInstructions(ins: [][]const u8, stacks: *[9]std.ArrayList(u8)) !void {
     for (ins) |i| {
@@ -65,17 +67,10 @@ fn executeInstructions(ins: [][]const u8, stacks: *[9]std.ArrayList(u8)) !void {
         }
     }
     for (stacks.*) |stack| {
-        // std.debug.print("{s}\n", .{stack.items});
         std.debug.print("{c}", .{stack.items[0]});
     }
     print("\n", .{});
 }
-
-const Instruction = struct {
-    count: u8,
-    from: u8,
-    to: u8,
-};
 
 fn parseInstruction(instruction: []const u8) Instruction {
     var count: u8 = 0;
@@ -124,26 +119,3 @@ test "simple test" {
     try expect(getIndex(13) == 3);
     try expect(getIndex(17) == 4);
 }
-
-// fn getNumOfStacks(data: []u8) u32 {
-//     var count: u32 = 0;
-//     for (data) |char| {
-//         if (char == 'm') break;
-//         switch (char) {
-//             '1'...'9' => count += 1,
-//             else => continue,
-//         }
-//     }
-//     return count;
-// }
-// fn getNumOfCrates(data: []u8) u32 {
-//     var count: u32 = 0;
-//     for (data) |char| {
-//         if (char == 'm') break;
-//         switch (char) {
-//             '[' => count += 1,
-//             else => continue,
-//         }
-//     }
-//     return count;
-// }
