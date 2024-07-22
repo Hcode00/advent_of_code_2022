@@ -3,6 +3,7 @@ const std = @import("std");
 const print = std.debug.print;
 const expect = std.testing.expect;
 
+const num_of_stacks = 9;
 pub fn main() !void {
     const fileName: []const u8 = "src/day5.txt";
     const file = try std.fs.cwd().openFile(fileName, .{});
@@ -13,7 +14,6 @@ pub fn main() !void {
     const data = try file.readToEndAlloc(allocator, 1024 * 20);
     defer allocator.free(data);
     var it = std.mem.split(u8, data, "\n");
-    const num_of_stacks = 9;
     var instructions = std.ArrayList([]const u8).init(std.heap.page_allocator);
     const Stacks = [num_of_stacks]std.ArrayList(u8);
     var stacks: Stacks = undefined;
@@ -58,7 +58,7 @@ const Instruction = struct {
     to: u8,
 };
 
-fn executeInstructions(ins: [][]const u8, stacks: *[9]std.ArrayList(u8)) !void {
+fn executeInstructions(ins: [][]const u8, stacks: *[num_of_stacks]std.ArrayList(u8)) !void {
     for (ins) |i| {
         const s = parseInstruction(i);
         for (0..s.count) |_| {
