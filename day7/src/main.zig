@@ -21,7 +21,9 @@ pub fn main() !void {
     }
     const tree = try parseText(arr.items, allocator);
     // tree.printTree();
-    std.debug.print("size = {d}\n", .{tree.SumDirsUpTo(100_000)});
+    std.debug.print("size = {d}\n", .{tree.Size()});
+
+    std.debug.print("dir to delete has size = {d}\n", .{tree.findDirToDelete(70000000, 30000000)});
 }
 
 fn parseText(buffer: [][]const u8, allocator: std.mem.Allocator) !t.Dir {
@@ -48,7 +50,7 @@ fn parseText(buffer: [][]const u8, allocator: std.mem.Allocator) !t.Dir {
             'd' => {
                 const space_index = findCharIndex(line, ' ');
                 const name = line[space_index + 1 ..];
-                try current.AddDir(name);
+                _ = try current.AddDir(name);
             },
             '1'...'9' => {
                 const space_index = findCharIndex(line, ' ');

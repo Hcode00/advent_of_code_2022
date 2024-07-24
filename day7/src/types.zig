@@ -64,6 +64,34 @@ pub const Dir = struct {
         return sum;
     }
 
+    pub fn findDirToDelete(self: *const Self, totalSpace: u64, requiredSpace: u64) u64 {
+        const usedSpace = self.Size();
+        const unusedSpace = totalSpace - usedSpace;
+        const spaceToFree = if (requiredSpace > unusedSpace) requiredSpace - unusedSpace else 0;
+
+        return self.findSmallestDirOverSize(spaceToFree);
+    }
+
+    fn findSmallestDirOverSize(self: *const Self, minSize: u64) u64 {
+        var smallestSize: u64 = std.math.maxInt(u64);
+        const currentSize = self.Size();
+
+        if (currentSize >= minSize and currentSize < smallestSize) {
+            smallestSize = currentSize;
+        }
+
+        for (self.content.items) |child| {
+            if (child == .Dir) {
+                const dirSize = child.Dir.findSmallestDirOverSize(minSize);
+                if (dirSize >= minSize and dirSize < smallestSize) {
+                    smallestSize = dirSize;
+                }
+            }
+        }
+
+        return smallestSize;
+    }
+
     pub fn SumDirsUpTo(self: *const Self, limit: u64) u64 {
         var sum: u64 = 0;
         const dirSize = self.Size();
