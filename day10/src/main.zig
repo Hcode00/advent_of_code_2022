@@ -18,24 +18,24 @@ pub fn main() !void {
     var it = std.mem.splitSequence(u8, data, "\n");
     var pairs = std.ArrayList(u.Pair).init(allocator);
     defer pairs.deinit();
+    std.debug.print("\n", .{});
     while (it.next()) |line| {
         if (line.len == 0) continue;
         switch (line[0]) {
             'n' => {
                 cycles += 1;
-                try u.Check(cycles, X, &pairs, &sum);
+                try u.CheckAndDraw(cycles, X, &pairs, &sum);
             },
             'a' => {
                 cycles += 1;
-                try u.Check(cycles, X, &pairs, &sum);
+                try u.CheckAndDraw(cycles, X, &pairs, &sum);
                 cycles += 1;
-                try u.Check(cycles, X, &pairs, &sum);
+                try u.CheckAndDraw(cycles, X, &pairs, &sum);
                 const value = try u.parseValue(line[5..]);
                 X += @as(i64, @intCast(value));
             },
             else => @panic("received unexpected input!\n"),
         }
     }
-    std.debug.print("\nX = {d}\n", .{X});
-    std.debug.print("sum = {d}\n", .{sum});
+    std.debug.print("\nsum = {d}\n", .{sum});
 }
