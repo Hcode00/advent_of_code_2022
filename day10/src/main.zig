@@ -36,6 +36,6 @@ pub fn main() !void {
             else => @panic("received unexpected input!\n"),
         }
     }
-    std.debug.print("X = {d}\n", .{X});
+    std.debug.print("\nX = {d}\n", .{X});
     std.debug.print("sum = {d}\n", .{sum});
 }
